@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ request.user }}'s playlists
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>My Playlist</h1>
+        <hr/>
+        <ul>
+        {% for playlist in object_list %}
+            <li>
+                <div>
+                    <p>
+                        <a class="" href="{% url 'playlist_detail' slug=playlist.slug%}">
+                            <h3>{{ playlist.name }}</h3>
+                        </a>
+                    </p>
+                    <p>created on {{ playlist.created_on }}</p>
+                    <a class="" href="{% url 'playlist_delete' pk=playlist.id %}">delete</a>
+                </div>
+            </li>
+        {% empty %}
+            <li>No playlist have been created yet</li>
+        {% endfor %}
+        </ul>
+        <a href="{% url 'playlist_create' %}">Create playlist</a>
+
+
+        {#        {% include 'music/playlists/playlist_create.html' %}#}
+
+    {#    <!-- Modal -->#}
+    {##}
+    {#    <div class="modal fade" id="myModal" role="dialog">#}
+    {#        <div class="modal-dialog">#}
+    {##}
+    {#            <!-- Modal content-->#}
+    {#            <div class="modal-content">#}
+    {#                <div class="modal-header">#}
+    {#                    <button type="button" class="close" data-dismiss="modal">&times;</button>#}
+    {#                    <h4>Enter Playlist Name</h4>#}
+    {#                </div>#}
+    {#                <div class="modal-body">#}
+    {#                    <form action="." method="post">#}
+    {#                        <input type="text">#}
+    {#                        {{ form.as_p }}#}
+    {#                        {% csrf_token %}#}
+    {#                        <p><input type="submit" value="Save playlist"></p>#}
+    {#                    </form>#}
+    {#                </div>#}
+    {##}
+    {#                <div class="modal-footer">#}
+    {#                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    </div>
+
+{% endblock %}

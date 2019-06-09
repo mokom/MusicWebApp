@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Mosiac An Entertainment Platform
+{% endblock %}
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+{% include 'top_app_header.html' %}
+
+<div id="page-wrapper">
+    <div class="inner-content">
+        <div class="music-left">
+            <!--banner-section-->
+            <div class="banner-section">
+                <div class="banner">
+                    <div class="callbacks_container">
+                        <ul class="rslides callbacks callbacks1" id="slider4">
+                            <li>
+                                <div class="banner-img">
+                                    <img src="{% static 'music/images/11.jpg' %}" class="img-responsive" alt="">
+                                </div>
+                                <div class="banner-info">
+                                    <a class="trend" href="single.html">TRENDING</a>
+                                    <h3>Let Your Home</h3>
+                                    <p>Album by <span>Rock star</span></p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="banner-img">
+                                    <img src="{% static 'music/images/22.jpg' %}" class="img-responsive" alt="">
+                                </div>
+                                <div class="banner-info">
+                                    <a class="trend" href="single.html">TRENDING</a>
+                                    <h3>Charis Brown feet</h3>
+                                    <p>Album by <span>Rock star</span></p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="banner-img">
+                                    <img src="{% static 'music/images/33.jpg' %}" class="img-responsive" alt="">
+                                </div>
+                                <div class="banner-info">
+                                    <a class="trend" href="single.html">TRENDING</a>
+                                    <h3>Let Your Home</h3>
+                                    <p>Album by <span>Rock star</span></p>
+                                </div>
+                                <!-- /w3layouts-agileits -->
+                            </li>
+                        </ul>
+                    </div>
+                    <!--banner-->
+                    <div class="clearfix"> </div>
+                </div>
+            </div>
+            <!--//End-banner-->
+            <!--albums-->
+            <!-- pop-up-box -->
+            <div class="albums">
+                <div class="tittle-head">
+                    <h3 class="tittle">New Album Releases <span class="new">New</span></h3>
+                    <a href="{% url 'album_list' %}"><h4 class="tittle">See all</h4></a>
+                    <div class="clearfix"> </div>
+                </div>
+                {% for album in albums %}
+                    <div class="col-md-2 browse-grid">
+                        <a class="play-icon popup-with-zoom-anim" href="{% url 'album_detail' slug=album.slug %}">
+                            <img src="{{ album.thumbnail.url }}" title="{{ album.title }}" class="img-responsive">
+                        </a>
+                        <a class="button play-icon popup-with-zoom-anim" href="{% url 'user_detail' username=album.artist %}">{{ album.artist }}</a>
+                    </div>
+                {% endfor %}
+                <div class="clearfix"> </div>
+            </div>
+            <!--//End-albums-->
+            <!--//discover-view-->
+            <!--Singles-->
+            <div class="albums">
+                <div class="tittle-head">
+                    <h3 class="tittle">New Single Releases <span class="new">New</span></h3>
+                    <div class="clearfix"> </div>
+                </div>
+                {% for track in tracks %}
+                    <div class="col-md-2 browse-grid">
+                        <a class="play-icon popup-with-zoom-anim" href="{% url 'track_detail' slug=track.slug %}">
+                            {% if track.thumbnail %}
+                                <img src="{{ track.thumbnail.url }}" alt="music-art" title="{{ track.title }}" class="img-responsive">
+                            {% else %}
+                                <img src="" alt="music-art" class="img-responsive">
+                            {% endif %}
+                        </a>
+                        <div class="inner-info" style="background-color: transparent; bottom:97px; right: 25px">
+                            <img src="{% static 'music/images/play.svg' %}" width="60px" height="60px" class="play-button text-center" onclick="Play_Audio('{{ track.audio_file.url }}')">
+                        </div>
+                        <a class="" href="{% url 'track_detail' slug=track.slug %}">{{ track.title }}</a>
+                        <a class="button play-icon popup-with-zoom-anim" href="{{ track.artist.get_absolute_url }}">{{ track.artist.get_full_name }}</a>
+                    </div>
+                {% endfor %}
+                <div class="clearfix"> </div>
+            </div>
+            <!--end singles-->
+        </div>
+        <div class="clearfix"></div>
+			 	 <!-- /w3l-agile-its -->
+    </div>
+						<!--body wrapper start-->
+
+</div>
+    <!--//music-left-->
+    <div class="clearfix"></div>
+
+    {% include 'footer.html' %}
+{% endblock %}

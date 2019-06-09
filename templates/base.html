@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Mosaic Responsive web template, Bootstrap Web Templates, Flat Web Templates,
+     Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG,
+      SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript">
+        addEventListener("load", function() {
+            setTimeout(hideURLbar, 0);
+        }, false);
+        function hideURLbar(){
+            window.scrollTo(0,1);
+        }
+    </script>
+
+    <link href="{% static 'music/css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+    <!-- Custom CSS -->
+    <link href="{% static 'music/css/style.css' %}" rel='stylesheet' type='text/css' />
+    <!-- Graph CSS -->
+    <link href="{% static 'music/css/font-awesome.css' %}" rel="stylesheet">
+    <!-- jQuery -->
+    <!-- lined-icons -->
+    <link rel="stylesheet" href="{% static 'music/css/icon-font.css' %}" type='text/css' />
+    <!-- audio -->
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'music/css/audio.css' %}">
+    <!-- pop-up-box -->
+    <link href="{% static 'music/css/popuo-box.css' %}" rel="stylesheet" type="text/css" media="all">
+    <!-- script for video play-list -->
+    <link href="{% static 'music/css/jplayer.blue.monday.min.css' %}" rel="stylesheet" type="text/css">
+
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+
+    {% block styles %}
+
+    {% endblock %}
+</head>
+<body class="sticky-header left-side-collapsed"  onload="initMap()">
+
+{#        {% include 'sticky-left-side.html' %}#}
+
+        <div class="main-content">
+
+            <div class="container">
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="alert alert-{{ message.tags }} alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            {{ message|safe }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+        {% block content %}
+
+        {% endblock %}
+        </div>
+
+
+
+    {% include 'scripts.html' %}
+
+    {% block user_scripts %}
+
+    {% endblock %}
+</body>
+</html>

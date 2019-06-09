@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if object %}
+        Edit playlist "{{ object.name }}"
+    {% else %}
+        Create a Playlist
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+    {% include 'top_app_header.html' %}
+
+    <div class="container">
+
+        <div id="header" style="margin-top: 50px;">
+            <div id="branding">
+                <h1 class="form-title">
+                    {% if object %}
+                        <h1>Edit playlist "{{ object.name }}"</h1>
+                    {% else %}
+                        <h1>Create a Playlist</h1>
+                    {% endif %}
+                </h1>
+            </div>
+        </div>
+
+        <div id="content" style="margin-bottom: 50px">
+            <div id="content-main">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+{#                    <div class="form-row">#}
+{#                        <label class="required" for="id_name">Name:</label>#}
+{#                        <input type="text" name="name" autofocus maxlength="254" required id="id_name">#}
+{#                        <p><small class="helptext">Enter a name for your playlist</small></p>#}
+{#                    </div>#}
+{#                    <div class="form-row">#}
+{#                        <label class="required" for="id_slug">Slug:</label>#}
+{#                        <input type="text" name="slug" maxlength="100" required id="id_slug">#}
+{#                    </div>#}
+                    <div class="submit-row">
+                        <input type="submit" class="btn" value="Save playlist">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+{% endblock %}

@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block styles %}
+<style>
+    .nav-tabs {
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+{{ track.artist }} - {{ track.title}}
+{% endblock %}
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+    {% include 'top_app_header.html' %}
+
+    <div class="container">
+        <div class="jumbotron">
+            {% if track.thumbnail %}
+                <img src="{{ track.thumbnail.url }}" title="{{ track.title }}" class="img-responsive col-md-3" height="150" width="150">
+            {% else %}
+                <img src="{{ track.album.thumbnail }}" title="{{ track.title }}" class="img-responsive" height="150" width="150">
+            {% endif %}
+
+            <div class="col-md-4">
+                <p>{{ track.title }}</p>
+                <p><a href="{% url 'user_detail' username=track.artist.username %}"> {{ track.artist }} </a></p>
+                {% if track.album %}
+                    <p>Album: <em><a href="{% url 'album_detail' slug=track.album.slug %}"> {{ track.album }}</a></em></p>
+                {% endif %}
+                <button style="margin-top: 10px;" class="btn btn-success" onclick="Play_Audio('{{ track.audio_file.url }}')">Play</button>
+            </div>
+
+            <div class="col-md-5">
+                <h2>Music Video</h2>
+                    {% if track.video_file %}
+                        <div  style="float: right;">
+                            <video width="400" controls>
+                                <source src="{{ track.video_file.url }}" type="video/mp4">
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </div>
+                    {% else %}
+                        {% if track.artist == request.user %}
+                            <a href="#" class="btn btn-xs btn-warning">Upload</a>
+                        {% else %}
+                            No video available
+                        {% endif %}
+                    {% endif %}
+{#                <!-- {% endfor %} -->#}
+            </div>
+        <div class="clearfix"></div>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div>
+            <div>
+            {% comment %}       Alternate Ajax like button.
+                <p>
+                    <a href="{{ track.get_like_url }}" data-href="{{ track.get_api_like_url }}"
+                        data-likes="{{ track.likes.count }}" class="like-btn btn btn-default btn-xs"> {{track.likes.count  }} Like</a>
+                </p>
+            {% endcomment %}
+
+                <span id="likeCount">{{ track.likes.count }}</span>
+                <a class="like btn btn-default btn-xs" href="{% url 'like_track' slug=track.slug %}" data-action="{% if request.user in track.likes.all %}un{% endif %}like">
+                    {% if request.user not in track.likes.all %}
+                        Like
+                    {% else %}
+                        Unlike
+                    {% endif %}
+                </a>
+                <a href="#" class="btn btn-danger btn-xs">Played: 0 times</a>
+                <a href="#" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">add to playlist</a>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #000;">
+                            <button type="button" class="close" data-dismiss="modal" style="font-size: 1.8em; color: red;">&times;</button>
+                            {% if not playlists%}
+                                <h4 class="modal-title" style="color: #fff; font-size: 1.5em">Create Playlist</h4>
+                            {% else %}
+                                <h4 class="modal-title" style="color: #fff; font-size: 1.5em">Choose Playlist</h4>
+                            {% endif %}
+                        </div>
+
+                        <div class="modal-body">
+                            {% if not playlists %}
+                                You don't have any playlist yet. Add one <a href="{% url 'playlist_create' %}" style="color: red">here</a>
+                            {% else %}
+                                <ul>
+                                {% for playlist in playlists %}
+                                    <form action="{% url 'add_music_to_playlist' track=track.id playlist=playlist.id %}" method="post">
+                                        {% csrf_token %}
+                                        <li style="list-style-type: none" style="margin: 5px 0;">
+                                            <p style="clear:both; padding:10px">
+                                                <span style="font-weight:700">{{ playlist.name }}</span>
+                                                <input type="submit" class="btn btn-warning btn-xs" style="padding: 3px; float: right" value="Add here">
+                                            </p>
+                                        </li>
+                                    </form>
+                                {% endfor %}
+                                </ul>
+                                <a href="{% url 'playlist_create' %}" class="btn-xs btn btn-default">Create another playlist</a>
+                            {% endif %}
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 ">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#lyrics">Lyrics</a></li>
+                    <li><a data-toggle="tab" href="#comments">Comments: <span class="badge">{{ track.comments.count }}</span></a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="lyrics" class="tab-pane fade in active">
+                        {% if track.lyrics %}
+                            {{ track.lyrics | safe }}
+                        {% else %}
+                            <h4 class="text-center" style="margin-top: 40px;">Sorry but no lyrics available for this track at the moment</h4>
+                        {% endif %}
+                    </div>
+
+
+
+                    <div class="response tab-pane fade" id="comments">
+                        <h4>Comments <span class="badge" style="font-size: 0.8em">{{ track.comments.count }}</span></h4>
+                        <h4><a href="{% url 'track-comment-thread' slug=track.slug%}">View all comments</a></h4>
+                        {% for comment in comments %}
+                            <div class="media response-info">
+                                {% if forloop.counter|divisibleby:"2" %}
+                                    <div class="media-left response-text-left">
+                                        {% if comment.author.profile.photo %}
+                                            <a href="{% url 'user_detail' username=comment.author.username %}">
+                                                <img src="{{ comment.author.profile.photo.url }}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'user_detail' username=comment.author.username %}">
+                                                <img src="{% static 'music/images/user.svg' %}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                                            </a>
+                                        {% endif %}
+                                        <h5><a href="{% url 'user_detail' username=comment.author.username %}">{{ comment.author.username }}</a></h5>
+                                    </div>
+
+                                    <div class="media-body response-text-right">
+                                        <p>{{ comment.content }}</p>
+                                        <ul>
+                                            <li><i class="fa fa-clock-o"></i>{{ comment.timestamp|timesince }} ago</li>
+                                        </ul>
+                                    </div>
+                                {% else %}
+                                    <div class="media-body response-text-right">
+                                        <p>{{ comment.content }}</p>
+                                        <ul>
+                                            <li><i class="fa fa-clock-o"></i>{{ comment.timestamp|timesince }} ago</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="media-left response-text-left">
+                                        {% if comment.author.profile.photo %}
+                                            <a href="{% url 'user_detail' username=comment.author.username %}">
+                                                <img src="{{ comment.author.profile.photo.url }}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'user_detail' username=comment.author.username %}">
+                                                <img src="{% static 'music/images/user.svg' %}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                                            </a>
+                                        {% endif %}
+                                        <h5><a href="{% url 'user_detail' username=comment.author.username %}">{{ comment.author.username }}</a></h5>
+                                    </div>
+
+                                {% endif %}
+                                <div class="clearfix"> </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="clearfix"></div>
+
+                        {% if request.user.is_authenticated %}
+                            <div class="add-comment">
+                                <header>
+                                    <h3 class="">Leave a reply</h3>
+                                </header>
+                                <form method="POST" action="#comments" class="commenting-form">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="form-group col-md-12">
+                                            {{ form|crispy }}
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <button type="submit" class="btn btn-secondary">Submit Comment</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-primary">Login to comment</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row">
+                    <h3>Related tracks</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% include 'footer.html' %}
+
+{% endblock %}
+
+{% block user_scripts %}
+<script src="{% static 'music/js/like_btn.js' %}"></script>
+{% endblock %}

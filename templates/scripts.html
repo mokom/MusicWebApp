@@ -1,0 +1,127 @@
+{% load static %}
+
+<script src="{% static 'music/js/jquery-2.1.4.js' %}"></script>
+{#<script src="{% static 'music/js/jquery-3.4.1.js' %}"></script>#}
+<script src="{% static 'music/js/playMusic.js' %}"></script>
+
+<!-- search-scripts -->
+<script src="{% static 'music/js/classie.js' %}"></script>
+<script src="{% static 'music/js/uisearch.js' %}"></script>
+<script>
+    new UISearch( document.getElementById( 'sb-search' ) );
+</script>
+
+<!-- audio -->
+<script type="text/javascript">
+    $(function(){
+        $('#audio-player').mediaelementplayer({
+            alwaysShowControls: true,
+            features: ['playpause','progress','volume'],
+			audioVolume: 'horizontal',
+			iPhoneUseNativeControls: true,
+            iPadUseNativeControls: true,
+            AndroidUseNativeControls: true
+        });
+    });
+</script>
+<script type="text/javascript" src="{% static 'music/js/mediaelement-and-player.min.js' %}"></script>
+<!--banner-->
+<script src="{% static 'music/js/responsiveslides.min.js' %}"></script>
+<script>
+    // You can also use "$(window).load(function() {"
+	$(function () {
+	    // Slideshow 4
+		$("#slider4").responsiveSlides({
+            auto: true,
+			pager:true,
+			nav:true,
+			speed: 500,
+        	namespace: "callbacks",
+			before: function () {
+                $('.events').append("<li>before event fired.</li>");
+            },
+            after: function () {
+                $('.events').append("<li>after event fired.</li>");
+            }
+        });
+    });
+</script>
+<!-- pop-up-box -->
+<script src="{% static 'music/js/jquery.magnific-popup.js' %}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $('.popup-with-zoom-anim').magnificPopup({
+            type: 'inline',
+            fixedContentPos: false,
+            fixedBgPos: true,
+            overflowY: 'auto',
+            closeBtnInside: true,
+            preloader: false,
+            midClick: true,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in'
+        });
+    });
+</script>
+<!-- script for video play-list -->
+<script type="text/javascript" src="{% static 'music/js/jquery.jplayer.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'music/js/jplayer.playlist.min.js' %}"></script>
+<script type="text/javascript">
+    $(window).load(function() {
+        $("#flexiselDemo1").flexisel({
+            visibleItems: 5,
+            animationSpeed: 1000,
+            autoPlay: true,
+            autoPlaySpeed: 3000,
+            pauseOnHover: false,
+            enableResponsiveBreakpoints: true,
+            responsiveBreakpoints: {
+                portrait: {
+                    changePoint:480,
+                    visibleItems: 2
+                },
+                landscape: {
+                    changePoint:640,
+                    visibleItems: 3
+                },
+                tablet: {
+                    changePoint:800,
+                    visibleItems: 4
+                }
+            }
+        });
+    });
+</script>
+<!-- For Review slider-->
+<script type="text/javascript" src="{% static 'music/js/jquery.flexisel.js' %}"></script>
+
+<!-- body scripts-->
+<script src="{% static 'music/js/jquery.nicescroll.js' %}"></script>
+<script src="{% static 'music/js/scripts.js' %}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="{% static 'music/js/bootstrap.js' %}"></script>
+
+<script src='{% static "music/js/highlight.pack.js" %}'></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="{% static 'music/js/js.cookie.js' %}"></script>
+<script>
+    var csrftoken = Cookies.get('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>
+
+<script>
+$('.comment-reply-btn').click(function (e) {
+    e.preventDefault();
+    $(this).parent().next().next(".comment-replies").fadeToggle();
+});
+</script>

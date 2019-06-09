@@ -1,0 +1,29 @@
+{% load static %}
+
+<div class="activities">
+    <div class="images">
+        {% if action.user.profile.photo %}
+            <img src="{{ action.user.profile.photo.url }}" class="img-responsive" height="50" width="50">
+        {% else %}
+            <img src="{% static 'music/images/user.svg' %}" class="img-responsive" height="50" width="50">
+        {% endif %}
+    </div>
+
+
+    <div class="info">
+
+        <small><span class="action-date">{{ action.created|timesince }} ago</span></small>
+        <br>
+    <p style="color: #999">
+        <a href="{{ action.user.get_absolute_url }}">{{ action.user.get_full_name }}</a>
+
+        {{ action.verb }}
+
+        {% if action.target %}
+            <a href="{{ action.target.get_absolute_url }}">
+                {{ action.target }}
+            </a>
+        {% endif %}
+    </p>
+    </div>
+</div>

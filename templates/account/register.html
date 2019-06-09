@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+Register For MusicWorld
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Create An Account</h1>
+    <p>Please, register using the following form</p>
+    <!--Content-->
+    <div id="content">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="errornote">
+                        {{ message|safe }}
+                        <a href="#" class="close">x</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if form.errors %}
+            <p class="errornote">{{ errors }}</p>
+        {% endif %}
+
+        <form action="." method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <p><input type="submit" value="Create my account"></p>
+        </form>
+
+    </div>
+    <!--End Content-->
+</div>
+{% endblock %}

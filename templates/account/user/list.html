@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+All Artists
+{% endblock %}
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+    {% include 'top_app_header.html' %}
+
+    <div class="container">
+        <div class="browse">
+            <div class="tittle-head two">
+                <h3 class="tittle">All Artist</h3>
+                <div class="clearfix"> </div>
+            </div>
+
+            {% for artist in queryset %}
+                <div class="col-md-3 browse-grid">
+                    <a href="{{ user.get_absolute_url }}">
+                        {% if artist.profile.photo %}
+                            <img src="{{ artist.profile.photo.url }}" title="{{ artist.username }}">
+                        {% else %}
+                            <img src="{% static 'music/images/user.svg' %}" title="{{ artist.username }}">
+
+                        {% endif %}
+                    </a>
+                    <a class="sing" href="{{ artist.get_absolute_url }}">{{ artist.get_full_name}}</a>
+                </div>
+            {% empty %}
+                Sorry but no artists are available at the moment
+            {% endfor %}
+
+        </div>
+
+        <!-- Pagination -->
+        <div class="clearfix"></div>
+        <nav aria-label="Page navigation" class="text-center">
+            {% if queryset.has_other_pages %}
+                <ul class="pagination pagination-template d-flex justify-content-center">
+                    {% if queryset.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ queryset.previous_page_number }}"><i class="fa fa-angle-left"></i> </a> </li>
+                    {% endif %}
+                    {% for i in queryset.paginator.page_range %}
+                        {% if queryset.number == i %}
+                            <li class="page-item"><a href="?page={{ i }}" class="page-link active">{{ i }}</a> </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if queryset.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ queryset.next_page_number }}"><i class="fa fa-angle-right"></i> </a> </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </nav>
+    </div>
+    <!--//End-albums-->
+
+    {% include 'footer.html' %}
+
+{% endblock %}

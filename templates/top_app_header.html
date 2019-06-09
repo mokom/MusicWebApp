@@ -1,0 +1,95 @@
+{% load static %}
+<!-- header-starts -->
+<div class="header-section">
+    <!--toggle button start-->
+    <a class="toggle-btn  menu-collapsed"><i class="fa fa-bars"></i></a>
+    <!--toggle button end-->
+    <!--notification menu start -->
+    <div class="menu-right">
+        <div class="profile_details">
+            <div class="col-md-4 serch-part">
+                <div id="sb-search" class="sb-search">
+                    <form action="{% url 'search' %}" method="get">
+                        <input class="sb-search-input" placeholder="Search" type="search" name="q" id="q">
+                        <input class="sb-search-submit" type="submit" value="">
+                        <span class="sb-icon-search"> </span>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4 player">
+                <div class="audio-player">
+                    <audio id="audio-player"  controls="controls">
+                        <source class="audio" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <ul class="next-top">
+                    <li><a class="ar" href="#"> <img src="{% static 'music/images/arrow.png' %}" alt=""/></a></li>
+                    <li><a class="ar2" href="#"><img src="{% static 'music/images/arrow2.png' %}" alt=""/></a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 login-pop">
+                {% if request.user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            Welcome {{ request.user.get_full_name }}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+{#                        <li class="dropdown-header">Dropdown header 1</li>#}
+                            <li><a href="{{ request.user.get_absolute_url }}">Profile</a></li>
+                            <li><a href="{{ request.user.get_absolute_url }}#playlists">Playlist</a></li>
+                            <li><a href="{% url 'upload_album' %}">Upload Album</a></li>
+                            <li><a href="{% url 'upload_single' %}">Upload single</a></li>
+                            <li class="dropdown-header"><hr /></li>
+                            <li><a href="{% url 'logout' %}">Sign Out</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+
+
+
+{#                <div id="loginpop">#}
+{#                    <a href="#" id="loginButton">#}
+{#                        <span>#}
+{#                            {% if request.user.is_authenticated %}#}
+{#                                {{ request.user }}#}
+{#                                <i class="arrow glyphicon glyphicon-chevron-down"></i>#}
+{#                            {% else %}#}
+{#                                Login#}
+{#                            {% endif %}#}
+{#                        </span>#}
+{#                    </a>#}
+{#                    <a class="top-sign" href="#" data-toggle="modal" data-target="#myModal5">#}
+{#                        <i class="fa fa-sign-in"></i>#}
+{#                    </a>#}
+{#                    <div id="loginBox">#}
+{#                        <form action="#" method="post" id="loginForm">#}
+{#                            <fieldset id="body">#}
+{#                                <fieldset>#}
+{#                                    <label for="email">Email Address</label>#}
+{#                                    <input type="text" name="email" id="email">#}
+{#                                </fieldset>#}
+{#                                <fieldset>#}
+{#                                    <label for="password">Password</label>#}
+{#                                    <input type="password" name="password" id="password">#}
+{#                                </fieldset>#}
+{#                                <input type="submit" id="login" value="Sign in">#}
+{#                                <label for="checkbox"><input type="checkbox" id="checkbox"> <i>Remember me</i></label>#}
+{#                            </fieldset>#}
+{#                            <span><a href="#">Forgot your password?</a></span>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <!-------->
+    </div>
+    <div class="clearfix"></div>
+</div>
+<!--notification menu end -->
+			<!-- //header-ends -->
+ 	 <!-- /w3l-agileits -->
+		<!-- //header-ends -->

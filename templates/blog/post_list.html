@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+    {% include 'top_app_header.html' %}
+
+    <div class="container">
+
+        <div id="page-wrapper">
+            <div class="inner-content">
+                <!-- /blog -->
+                <div class="col-md-8">
+                    <div class="tittle-head">
+                        <h3 class="tittle">Our Blogs </h3>
+                        <div class="clearfix"> </div>
+                    </div>
+                    {% if tag %}
+                        <h2>Posts tagged with "{{ tag.name }}"</h2>
+                    {% endif %}
+
+                    {% for post in queryset %}
+                        <div class="post-media" style="margin-bottom: 30px;">
+                            <a href="single.html"><img src="{{ post.thumbnail.url }}" class="img-responsive" alt="" /></a>
+                            <div class="blog-text">
+                                <a href="{% url 'post_detail' slug=post.slug %}"><h3 class="h-t">{{ post.title }}</h3></a>
+                                <a href="">
+                                    <div class="category">
+                                        {% for tag in post.tags.all %}
+                                            <a href="{% url "post_list_by_tag" tag.slug %}">{{ tag.name }}</a>
+                                            {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </a>
+                                <div class="entry-meta">
+                                    <h6 class="blg"><i class="fa fa-clock-o"></i> {{ post.timestamp|timesince }} ago</h6>
+                                    <div class="icons">
+                                        <a href="#"><i class="fa fa-user"></i> {{ post.author }}</a>
+                                        <a href="#"><i class="fa fa-comments-o"></i> {{ post.comments.count }}</a>
+                                        <a href="#"><i class="fa fa-thumbs-o-up"></i> {{ post.likes.count }}</a>
+                                        <a href="#"><i class="fa fa-eye"></i>{{ post.view_count }}</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <p>{{ post.content|truncatewords:40|safe }}</p>
+                                </div>
+                                <a href="{% url 'post_detail' slug=post.slug %}" class="btn btn-default">Read</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <!--start-blog-pagenate-->
+                    <nav aria-label="Page navigation" class="text-center">
+                        {% if queryset.has_other_pages %}
+                            <ul class="pagination pagination-template d-flex justify-content-center">
+                                {% if queryset.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ queryset.previous_page_number }}"><i class="fa fa-angle-left"></i> </a> </li>
+                                {% endif %}
+
+                                {% for i in queryset.paginator.page_range %}
+                                    {% if queryset.number == i %}
+                                        <li class="page-item"><a href="?page={{ i }}" class="page-link active">{{ i }}</a> </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if queryset.has_next %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ queryset.next_page_number }}"><i class="fa fa-angle-right"></i> </a> </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </nav>
+                </div>
+                <!-- //music-left-->
+                <!-- /music-right-->
+                <div class="col-md-4">
+                    {% include 'blog/side_section.html' %}
+                </div>
+                <div class="clearfix"></div>
+
+
+                <!-- //blog -->
+            </div>
+
+            <div class="clearfix"></div>
+            <!--body wrapper end-->
+	 <!-- /w3l-agile -->
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+{% endblock %}

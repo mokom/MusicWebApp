@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block style %}
+    <style>
+        #playlist, audio{background:#666;width:400px;padding:20px;}
+        .active a{color:#5DB0E6;text-decoration:none;}
+        li a{color:#eeeedd;background:#333;padding:5px;display:block;}
+        li a:hover{text-decoration:none;}
+    </style>
+{% endblock %}
+
+
+{% block title %}
+{{ playlist.name }}
+{% endblock %}
+
+
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+    {% include 'top_app_header.html' %}
+
+    <div class="container">
+        <div class="row" style="margin: 50px 0">
+            <h1>{{ playlist.name }}</h1>
+            <ul id="playlist">
+            {% for track in playlist.track_set.all %}
+                <li style="list-style: decimal">
+                    <a href="{{ track.audio_file.url }}" style="padding-right: 10px; border-right: 1px solid #f2f2f2;">{{ track }}</a>
+                    <a href="{% url 'remove_music_from_playlist' track=track.id playlist=playlist.id %}" style="padding-left: 10px">remove</a>
+                </li>
+            {% endfor %}
+            </ul>
+
+            <hr>
+
+            <script src="{% static 'js/playlist.js' %}" ></script>
+            <button onclick="init()">Play Playlist</button>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+{% endblock %}

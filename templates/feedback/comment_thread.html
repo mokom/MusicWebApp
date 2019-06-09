@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+    {% include 'top_app_header.html' %}
+<div class="container">
+     <div class="media response-info" style="margin-top: 30px;">
+        <div class="media-left response-text-left">
+            {% if comment.author.profile.photo %}
+                <a href="{% url 'user_detail' username=comment.author.username %}">
+                    <img src="{{ comment.author.profile.photo.url }}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                </a>
+            {% else %}
+                <a href="{% url 'user_detail' username=comment.author.username %}">
+                    <img src="{% static 'music/images/user.svg' %}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                </a>
+            {% endif %}
+            <h5><a href="{% url 'user_detail' username=comment.author.username %}">{{ comment.author.username }}</a></h5>
+        </div>
+
+         <div class="media-body response-text-right">
+             <p>{{ comment.content }}</p>
+             <ul>
+                 <li><span style="color: #999;"><i class="fa fa-clock-o"></i>{{ comment.timestamp|timesince }} ago</span></li>
+                 {% if comment.children.count > 0 %}
+                     | {{ comment.children.count }} comment{{ comment.children.count|pluralize }}
+                 {% endif %}
+             </ul>
+             <hr>
+             <div class="">
+                 {% for child_comment in comment.children %}
+                     <div class="media response-info">
+                         <div class="media-left response-text-left">
+                             {% if child_comment.author.profile.photo %}
+                                 <a href="{% url 'user_detail' username=child_comment.author.username %}">
+                                     <img src="{{ child_comment.author.profile.photo.url }}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                                 </a>
+                             {% else %}
+                                 <a href="{% url 'user_detail' username=child_comment.author.username %}">
+                                     <img src="{% static 'music/images/user.svg' %}" alt="..." class="img-responsive rounded-circle" height="70" width="70">
+                                 </a>
+                             {% endif %}
+                             <h5><a href="#">{{ child_comment.author.username }}</a></h5>
+                         </div>
+                         <div class="media-body response-text-right">
+                             <p>{{ child_comment.content }}</p>
+                             <ul>
+                                 <li><span style="color: #999;"><i class="fa fa-clock-o"></i>{{ child_comment.timestamp|timesince }} ago</span></li>
+                             </ul>
+                         </div>
+                         <div class="clearfix"> </div>
+                     </div>
+                 {% endfor %}
+
+                 <form method="POST" action="#comments" class="commenting-form">
+                     {% csrf_token %}
+                     <div class="row">
+                         <div class="form-group col-md-12">
+                             {{ form|crispy }}
+                             <input type="hidden" name="parent_id" value="{{ comment.id }}"/>
+                         </div>
+                         <div class="form-group col-md-12">
+                             <button type="submit" class="btn btn-secondary">Submit Comment</button>
+                         </div>
+                     </div>
+                 </form>
+             </div>
+         </div>
+         <div class="clearfix"> </div>
+     </div>
+</div>
+
+    {% include 'footer.html' %}
+
+{% endblock %}

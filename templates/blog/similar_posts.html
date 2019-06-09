@@ -1,0 +1,30 @@
+{% load static %}
+
+<div class="widget-side second">
+    <h4 class="widget-title">Similar Posts</h4>
+    <ul>
+        {% for post in similar_posts %}
+            <li>
+                <div class="song-img">
+                    <a href="#"><img src="{{ post.thumbnail.url }}" class="img-responsive" alt="" /></a>
+                </div>
+                <div class="song-text">
+                    <a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a>
+                    <span class="post-date">{{ post.timestamp|timesince }} ago</span>
+                </div>
+                <div class="clearfix"></div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% comment %}
+<div class="widget-side second">
+    <h4 class="widget-title">Tags</h4>
+        {% for tag in tag_count %}
+            <div class="item d-flex justify-content-between">
+                <a href="">{{ tag }}</a><span>{{ tag.frequency }}</span>
+            </div>
+        {% endfor %}
+</div>
+{% endcomment %}

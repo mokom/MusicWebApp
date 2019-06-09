@@ -1,0 +1,20 @@
+<!-- //widget -->
+    <div class="widget-side">
+        <h4 class="widget-title">Recent Posts</h4>
+        <ul>
+            {% for post in most_recent %}
+                <li>
+                    <div class="song-img">
+                        <a href="single.html"><img src="{{ post.thumbnail.url }}" class="img-responsive" alt="" /></a>
+                    </div>
+                    <div class="song-text">
+                        <a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a>
+                        <span class="post-date">{{ post.timestamp|timesince }} ago</span><br />
+                        <span class="post-date"><i class="fa fa-eye"></i> {{ post.view_count }}</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+<!-- //widget -->

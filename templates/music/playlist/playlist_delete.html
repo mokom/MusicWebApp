@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Playlist{% endblock %}
+
+{% block content %}
+
+    {% include 'sticky-left-side.html' %}
+
+    {% include 'top_app_header.html' %}
+
+    <h1>Delete Playlist"{{ object.name}}"</h1>
+    <div class="module">
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" class="button" value="Confirm">
+        </form>
+    </div>
+
+    {% include 'footer.html' %}
+{% endblock %}

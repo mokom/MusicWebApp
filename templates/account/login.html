@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Login</h1>
+        {% if form.errors %}
+            <p class="errornote">{{ errors }}</p>
+        {% else %}
+            <p>Please, use the following form to login. If you don't have an account <a href="{% url "register" %}">register here</a></p>
+        {% endif %}
+        <small>You can log in with either username or email</small>
+        <form method="post" action="." autocomplete="off">
+            {{ form|crispy }}
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}"/>
+            <p><input type="submit" value="Login"/></p>
+        </form>
+        <p><a href="{% url "register" %}">I don't have an account</a></p>
+        <p><a href="{% url "password_reset" %}">Forgotten your password?</a></p>
+    </div>
+{% endblock %}
